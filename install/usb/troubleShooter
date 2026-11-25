@@ -14,6 +14,8 @@ umask 077
 ROOT=${ROOT:-}
 STAGE=$ROOT/data/local/tmp/hmgapi-usb
 
+# an app_process build HMG-API hasn't checked (install.sh, uninstall.sh: ASK_BUILD in lib.sh)
+UNKNOWN_TOAST="HMG-API hasn't checked your car's software build yet, so nothing was changed. Please open an issue at github.com/Open-HMG/HMG-API with HMGAPI/install.log from this stick."
 toast() {
     echo "$1"
     [ -n "$ROOT" ] && return
@@ -64,7 +66,9 @@ if [ -f "$U/HMGAPI/UNINSTALL" ] || [ -f "$U/HMGAPI/UNINSTALL-PURGE" ]; then
     rc=$?
     cp "$STAGE.log" "$U/HMGAPI/install.log" 2>/dev/null
     rm -f "$STAGE.log"
-    if [ $rc = 0 ]; then toast "HMG-API uninstalled, restarting."; else toast "HMG-API uninstall failed: see HMGAPI/install.log on the stick."; fi
+    if [ $rc = 0 ]; then toast "HMG-API uninstalled, restarting."
+    elif grep -q "isn't a known stock build" "$U/HMGAPI/install.log" 2>/dev/null; then toast "$UNKNOWN_TOAST"
+    else toast "HMG-API uninstall failed: see HMGAPI/install.log on the stick."; fi
     finish $rc
 fi
 
@@ -83,6 +87,8 @@ cp "$STAGE.log" "$U/HMGAPI/install.log" 2>/dev/null
 rm -r "$STAGE" "$STAGE.log" 2>/dev/null
 if [ $rc = 0 ]; then
     toast "HMG-API installed, restarting."
+elif grep -q "isn't a known stock build" "$U/HMGAPI/install.log" 2>/dev/null; then
+    toast "$UNKNOWN_TOAST"
 else
     toast "HMG-API install failed: see HMGAPI/install.log on the stick."
 fi

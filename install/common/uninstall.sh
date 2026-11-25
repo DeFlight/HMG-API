@@ -88,7 +88,7 @@ else
     known=
     while read m label; do [ "$m" = "$ORIG" ] && known=$label; done < "$H/stock.txt"
     if [ -z "$known" ] && [ "$HMGAPI_FORCE" != 1 ]; then
-        fail "the app_process backup (md5 $ORIG) isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers."
+        fail "the app_process backup (md5 $ORIG) isn't a known stock build, so nothing was changed and HMG-API is still installed. $ASK_BUILD, and we'll help you finish the uninstall."
     fi
 fi
 

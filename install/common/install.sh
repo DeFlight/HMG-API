@@ -149,7 +149,7 @@ fi
 if [ -n "$LPFIX" ]; then
     if [ -n "$known" ]; then log "${Z#/system/bin/}: stock ($known)"
     elif [ "$HMGAPI_FORCE" = 1 ]; then log "WARNING: ${Z#/system/bin/} md5 $HAVE isn't a known stock build; HMGAPI_FORCE=1, going on at your own risk"
-    else fail "${Z#/system/bin/} md5 $HAVE isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers."
+    else fail "${Z#/system/bin/} md5 $HAVE isn't a known stock build, so nothing was changed. $ASK_BUILD, and we'll add your build."
     fi
 # an older wrapper with its stock copy there counts as an update too: after a factory reset wipes
 # /data/hmgapi (backup and all) while HMG-API stays on /system, HAVE is an older wrapper and BAK is
@@ -175,7 +175,7 @@ elif [ -n "$known" ]; then
 elif [ "$HMGAPI_FORCE" = 1 ]; then
     log "WARNING: app_process md5 $HAVE isn't a known stock build; HMGAPI_FORCE=1, going on at your own risk"
 else
-    fail "app_process md5 $HAVE isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers."
+    fail "app_process md5 $HAVE isn't a known stock build, so nothing was changed. $ASK_BUILD, and we'll add your build."
 fi
 
 # Before anything changes: the wrapper runs app_process.hmgapi-stock, so what that file is (an
