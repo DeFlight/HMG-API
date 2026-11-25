@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.0-rc.10 (2026-11-25)
 
 - **Updating over an older release installed with `HMGAPI/FORCE` on NEMESIS 1.17 no longer
   stops Android from starting** (#397, a Korean 2020 K5). Releases before #396 refused NEMESIS
