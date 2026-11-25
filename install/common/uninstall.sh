@@ -6,7 +6,8 @@
 # bytes back (md5 checked), HMG-API's files in /system are removed, and the app
 # is uninstalled. /data/hmgapi (mods, settings, stock backups) stays unless
 # --purge. Takes full effect at the next restart.
-# HMGAPI_FORCE=1: restore a backup whose md5 isn't a known stock build (own risk).
+# HMGAPI_FORCE=1: restore a backup whose md5 isn't a known stock build (own risk). For maintainers
+# only, over adb, for now: no USB stick file sets it and no message names it.
 # ROOT prefixes every path, for off-car tests only.
 umask 077
 H=${0%/*}
@@ -87,7 +88,7 @@ else
     known=
     while read m label; do [ "$m" = "$ORIG" ] && known=$label; done < "$H/stock.txt"
     if [ -z "$known" ] && [ "$HMGAPI_FORCE" != 1 ]; then
-        fail "the app_process backup (md5 $ORIG) isn't a known stock build, so nothing was changed. To restore it anyway, at your own risk, set HMGAPI_FORCE=1."
+        fail "the app_process backup (md5 $ORIG) isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers."
     fi
 fi
 

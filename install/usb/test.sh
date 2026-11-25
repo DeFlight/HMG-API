@@ -136,20 +136,19 @@ run $TS
 has "UNINSTALL with nothing installed: says so" "HMG-API isn't installed. Nothing was changed" "$out"
 rm $S/HMGAPI/UNINSTALL
 
-# another car's app_process: refused unless the owner puts HMGAPI/FORCE on the stick
+# another car's app_process: refused, and HMGAPI/FORCE on the stick doesn't change that (off for now)
 cp $R/system/bin/app_process $R/../app_process.mine
 echo "another car" >> $R/system/bin/app_process
 OTHER=$(tree)
 run $TS
-has "unknown app_process: refused, says how to go on" "an empty file HMGAPI/FORCE on the USB stick" "$(cat $S/HMGAPI/install.log)"
+has "unknown app_process: refused, asks for the line" "isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers." "$(cat $S/HMGAPI/install.log)"
+check "... and names no way to force it" "" "$(grep -i 'FORCE' $S/HMGAPI/install.log || true)"
 check "... nothing changed" "$OTHER" "$(tree)"
 : > $S/HMGAPI/FORCE
 run $TS
-has "HMGAPI/FORCE: installed at the owner's risk" "isn't a known stock build; HMGAPI_FORCE=1, going on at your own risk" "$(cat $S/HMGAPI/install.log)"
-: > $S/HMGAPI/UNINSTALL
-run $TS
-check "... and uninstalled back to that car's own bytes" "$OTHER" "$(tree)"
-rm $S/HMGAPI/UNINSTALL $S/HMGAPI/FORCE
+has "HMGAPI/FORCE on the stick: still refused (off for now)" "isn't a known stock build, so nothing was changed" "$(cat $S/HMGAPI/install.log)"
+check "... nothing changed" "$OTHER" "$(tree)"
+rm $S/HMGAPI/FORCE
 rm -rf $R/data/hmgapi
 mv $R/../app_process.mine $R/system/bin/app_process
 

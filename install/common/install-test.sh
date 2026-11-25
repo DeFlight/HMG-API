@@ -68,6 +68,8 @@ cp install/nemesis/bin/open.sh install/nemesis/bin/start.sh $P/nemesis/bin/; cp 
 cp $R/system/bin/app_process $T/real; echo x >> $R/system/bin/app_process
 run $P/install.sh $P
 has "unknown app_process refused" "isn't a known stock build, so nothing was changed" "$out"
+has "... asks for the line" "Please send this line to the HMG-API maintainers." "$out"
+check "... and names no way to force it (maintainers only, for now)" "" "$(echo "$out" | grep -i 'force' || true)"
 check "refusal exit code" 1 $rc
 check "nothing installed" no "$([ -e $R/system/bin/hmgapid ] && echo yes || echo no)"
 cp $T/real $R/system/bin/app_process
@@ -559,7 +561,14 @@ for build in known unknown; do
     check "... ($build) the stock copy and backup are the stock binary" "$want|$want" "$(md5sum < $R/system/bin/app_process.hmgapi-stock)|$(md5sum < $R/data/hmgapi/stock/system/bin/app_process)"
     check "... ($build) the wrapper is app_process, and no app_process.real was made" "$(md5sum < $P/app_process)|no" "$(md5sum < $R/system/bin/app_process)|$([ -e $R/system/bin/app_process.real ] && echo yes || echo no)"
     check "... ($build) the zygote start ends at stock" "$want" "$(chain)"
-    [ $build = known ] || export HMGAPI_FORCE=1   # an unknown build's backup goes back only when forced
+    if [ $build = unknown ]; then
+        B4=$(tree)
+        run $R/data/hmgapi/uninstall.sh
+        has "... ($build) the uninstall refuses an unknown backup, asking for the line" "isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers." "$out"
+        check "... ($build) and names no way to force it" "" "$(echo "$out" | grep -i 'HMGAPI_FORCE\|HMGAPI/FORCE' || true)"
+        check "... ($build) /system unchanged" "$B4" "$(tree)"
+        export HMGAPI_FORCE=1   # the maintainers' override over adb
+    fi
     run $R/data/hmgapi/uninstall.sh; unset HMGAPI_FORCE
     has "... ($build) the uninstall finishes" "HMG-API uninstalled" "$out"
     check "... ($build) and gives stock back at app_process" "$want" "$(md5sum < $R/system/bin/app_process)"

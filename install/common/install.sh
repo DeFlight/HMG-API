@@ -6,7 +6,9 @@
 # adds the boot hook, installs the HMG-API app, and turns the hooks on at the next
 # restart. Every /system file it replaces is backed up once (stock bytes, md5
 # checked) into /data/hmgapi/stock; uninstall.sh puts them back.
-# HMGAPI_FORCE=1: go on when app_process isn't a known stock build (own risk).
+# HMGAPI_FORCE=1: go on when app_process isn't a known stock build (own risk). For maintainers only,
+# over adb, for now: no USB stick file sets it and no message names it (the stick's HMGAPI/FORCE is
+# off in troubleshooter and the NEMESIS package's postinstall, for putting back later).
 # ROOT prefixes every path, for off-car tests only.
 umask 077
 P=${1:-${0%/*}}
@@ -147,7 +149,7 @@ fi
 if [ -n "$LPFIX" ]; then
     if [ -n "$known" ]; then log "${Z#/system/bin/}: stock ($known)"
     elif [ "$HMGAPI_FORCE" = 1 ]; then log "WARNING: ${Z#/system/bin/} md5 $HAVE isn't a known stock build; HMGAPI_FORCE=1, going on at your own risk"
-    else fail "${Z#/system/bin/} md5 $HAVE isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers. To install anyway, at your own risk: an empty file HMGAPI/FORCE on the USB stick, or HMGAPI_FORCE=1 over adb."
+    else fail "${Z#/system/bin/} md5 $HAVE isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers."
     fi
 # an older wrapper with its stock copy there counts as an update too: after a factory reset wipes
 # /data/hmgapi (backup and all) while HMG-API stays on /system, HAVE is an older wrapper and BAK is
@@ -173,7 +175,7 @@ elif [ -n "$known" ]; then
 elif [ "$HMGAPI_FORCE" = 1 ]; then
     log "WARNING: app_process md5 $HAVE isn't a known stock build; HMGAPI_FORCE=1, going on at your own risk"
 else
-    fail "app_process md5 $HAVE isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers. To install anyway, at your own risk: an empty file HMGAPI/FORCE on the USB stick, or HMGAPI_FORCE=1 over adb."
+    fail "app_process md5 $HAVE isn't a known stock build, so nothing was changed. Please send this line to the HMG-API maintainers."
 fi
 
 # Before anything changes: the wrapper runs app_process.hmgapi-stock, so what that file is (an

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **No owner-facing way to force an unknown `app_process`, for now.** An empty `HMGAPI/FORCE`
+  file on the USB stick no longer forces the USB install or the NEMESIS package, and the
+  refusals no longer say how to force: an `app_process` not in `stock.txt` is refused with
+  nothing changed (install and uninstall), and the refusal asks for its line to be sent to the
+  maintainers, who add it. Forcing past that check is how #397's unit lost its last stock file.
+  The override stays in the scripts for maintainers (over adb), and the stick file's lines are
+  commented out, not deleted, to put back later. Tested off-car only.
 - **The stock `app_process` list names what it covers** (`install/common/stock.txt`). It held one
   line, labelled "Kia EV6 US 260507". That one md5 is the stock `app_process` of every Gen5W
   system image checked so far: HMC, ECOHMC, KMC and ECOKMC for the US and Canada (260206, 260507,
