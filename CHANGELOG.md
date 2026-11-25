@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **The stock `app_process` list names what it covers** (`install/common/stock.txt`). It held one
+  line, labelled "Kia EV6 US 260507". That one md5 is the stock `app_process` of every Gen5W
+  system image checked so far: HMC, ECOHMC, KMC and ECOKMC for the US and Canada (260206, 260507,
+  260903) and KMC and ECOHMC for Korea (260902). So cars on those builds were already taken for
+  stock; the label said otherwise. The file now says which builds were checked and which
+  weren't (Genesis, India, some Korean images, the newer Hyundai and Kia images). Nothing the
+  installer does changes.
 - **Updating over an older release installed with `HMGAPI/FORCE` on NEMESIS 1.17 no longer
   stops Android from starting** (#397, a Korean 2020 K5). Releases before #396 refused NEMESIS
   1.17's LivePatch script at `app_process` as an unknown build (md5
