@@ -52,6 +52,9 @@ zygote_files() {
     [ -f "$ROOT/system/bin/app_process.real" ] && z="${z:+$z }/system/bin/app_process.real"
     echo "$z"
 }
+# what a refusal for an app_process build HMG-API hasn't checked asks of the owner (install.sh,
+# uninstall.sh; the USB installer's toast says the same in short)
+ASK_BUILD="HMG-API only takes app_process builds it has checked, and this one isn't checked yet. Please open an issue at https://github.com/Open-HMG/HMG-API/issues/new/choose with this line, your car and its head unit software version (e.g. 260507)"
 REMOUNTED=
 fail() {
     log "FAIL: $1"
